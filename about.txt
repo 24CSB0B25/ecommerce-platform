@@ -1,0 +1,158 @@
+Then the key is: build something that looks advanced, not something enormous.
+
+In 6 days, you should focus on:
+
+solid backend,
+clean UI,
+deployment,
+and a few “premium” features.
+
+Do NOT try to build full Amazon.
+
+A polished medium-sized project is far better than an unfinished giant project.
+
+Best 6-Day Version of Your E-Commerce Project
+
+Build:
+
+“A full-stack e-commerce platform with authentication, cart management, product filtering, admin product control, and payment integration.”
+
+That is enough for a strong resume project.
+
+Recommended Stack
+
+Use the fastest productive stack:
+
+Frontend
+React + Vite
+Tailwind CSS
+Backend
+Node.js + Express
+Database
+MongoDB Atlas
+
+(MongoDB is faster to develop in 6 days than PostgreSQL.)
+
+Other
+JWT authentication
+Cloudinary (optional)
+Stripe/Razorpay test payments
+Render/Railway/Vercel deployment
+EXACT FEATURES TO BUILD
+Must Have
+User Features
+Signup/Login
+Browse products
+Product details page
+Add to cart
+Remove from cart
+Checkout page
+Order placement
+Admin Features
+Add products
+Edit products
+Delete products
+
+This makes your project look much more complete.
+
+Product Features
+Search
+Category filter
+Price display
+Ratings display (static is fine)
+
+What Actually Makes It Resume-Worthy
+1. Clean Architecture
+
+Use proper folders:
+
+/client
+/server
+
+server/
+ ├── controllers
+ ├── routes
+ ├── models
+ ├── middleware
+ ├── utils
+2. Authentication
+
+JWT auth alone already adds value.
+
+3. Deployment
+
+This is VERY important.
+
+Deploy:
+
+frontend on Vercel,
+backend on Render/Railway,
+DB on MongoDB Atlas.
+
+A live project link matters a lot.
+
+4. Responsive UI
+
+Mobile + desktop.
+
+Recruiters notice this immediately.
+
+Best 6-Day Timeline
+Day 1
+Backend Setup
+Express server
+MongoDB connection
+User model
+Product model
+Auth routes
+
+Goal:
+Authentication working.
+
+Day 2
+Product APIs + Frontend Setup
+Product fetching
+Product page
+Search/filter
+Tailwind setup
+
+Goal:
+Products visible.
+
+Day 3
+Cart System
+Add/remove cart
+Quantity updates
+Cart persistence
+
+Goal:
+Shopping flow works.
+
+Day 4
+Admin Panel
+Add/edit/delete products
+Protected admin routes
+
+Goal:
+Complete backend flow.
+
+Day 5
+Checkout + Polish
+Fake checkout or Stripe test mode
+UI cleanup
+Responsive design
+Error handling
+
+Goal:
+Project feels complete.
+
+Day 6
+Deployment + Resume Prep
+Deploy app
+GitHub README
+Screenshots
+Architecture diagram
+Resume bullet points
+
+Goal:
+Professional presentation.

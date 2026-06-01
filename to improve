@@ -1,0 +1,69 @@
+* Buy now button 
+* 8 products instead of only 5 at the pages.
+
+
+
+Final Polishing Features (Optional but Nice)
+
+These take little effort and make the project look much more professional:
+
+Coupon Page
+
+Show:
+
+WELCOME20
+20% OFF
+Expires: 31 Dec 2028
+Status: Active
+
+instead of only the code.
+
+Search Suggestions
+
+Clicking a suggestion should immediately search.
+
+Dashboard Cards
+
+Add:
+
+Users
+Products
+Orders
+Revenue
+Coupons
+Loading Spinners
+
+Replace:
+
+Loading...
+
+with proper spinners.
+
+Empty States
+
+For example:
+
+No orders found
+No wishlist items
+No coupons available
+
+instead of blank pages.
+
+My Recommendation
+
+Before adding anything else, let's do:
+
+Environment Variables
+↓
+Render Backend Deployment
+↓
+Vercel Frontend Deployment
+
+because your project is already feature-complete.
+
+Send me:
+
+server/.env   (hide passwords/secrets)
+server/server.js
+
+and I'll walk you through deployment step-by-step.
