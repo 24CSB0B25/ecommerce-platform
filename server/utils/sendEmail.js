@@ -5,24 +5,43 @@ const sendEmail = async (
   subject,
   html
 ) => {
-  const transporter =
-    nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user:
-          process.env.EMAIL_USER,
-        pass:
-          process.env.EMAIL_PASS,
-      },
-    });
+  try {
+    const transporter =
+      nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user:
+            process.env.EMAIL_USER,
+          pass:
+            process.env.EMAIL_PASS,
+        },
+      });
 
-  await transporter.sendMail({
-    from:
-      process.env.EMAIL_USER,
-    to,
-    subject,
-    html,
-  });
+    console.log(
+      "Sending email to:",
+      to
+    );
+
+    const info =
+      await transporter.sendMail({
+        from:
+          process.env.EMAIL_USER,
+        to,
+        subject,
+        html,
+      });
+
+    console.log(
+      "Email sent:",
+      info.messageId
+    );
+  } catch (error) {
+    console.error(
+      "EMAIL ERROR:",
+      error
+    );
+    throw error;
+  }
 };
 
 module.exports = sendEmail;

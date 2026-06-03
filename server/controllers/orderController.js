@@ -80,8 +80,31 @@ const createOrder = async (req, res) => {
       req.user._id
     );
 
-    console.log("EMAIL SKIPPED FOR TEST");
-    
+    await sendEmail(
+      user.email,
+      "Order Confirmation 📦",
+      `
+        <h1>Order Confirmed</h1>
+
+        <p>
+          Hi ${user.name},
+        </p>
+
+        <p>
+          Your order has been placed successfully.
+        </p>
+
+        <p>
+          Order Total:
+          ₹${totalPrice}
+        </p>
+
+        <p>
+          Thank you for shopping with Nexus Store.
+        </p>
+      `
+    );
+
     await Cart.deleteMany({
       user: req.user._id,
     });
