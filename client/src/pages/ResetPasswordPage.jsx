@@ -28,7 +28,7 @@ function ResetPasswordPage() {
         try {
         const { data } =
             await axios.put(
-                `http://localhost:5000/api/auth/reset-password/${token}`,
+                `https://ecommerce-platform-backend-eksr.onrender.com/api/auth/reset-password/${token}`,
                 {
                     password,
                 }

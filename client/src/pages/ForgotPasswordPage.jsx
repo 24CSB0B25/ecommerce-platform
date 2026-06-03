@@ -13,7 +13,7 @@ function ForgotPasswordPage() {
       try {
         const { data } =
           await axios.post(
-            "http://localhost:5000/api/auth/forgot-password",
+            "https://ecommerce-platform-backend-eksr.onrender.com/api/auth/forgot-password",
             { email }
           );
 

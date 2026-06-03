@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_URL =
-  "http://localhost:5000/api/orders";
+  "https://ecommerce-platform-backend-eksr.onrender.com/api/orders";
 
 
 export const createOrder = async (
@@ -25,7 +25,7 @@ export const getMyOrders = async (
   token
 ) => {
   const { data } = await axios.get(
-    "http://localhost:5000/api/orders/myorders",
+    "https://ecommerce-platform-backend-eksr.onrender.com/api/orders/myorders",
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -41,7 +41,7 @@ export const getAllOrders = async (
 ) => {
   const { data } =
     await axios.get(
-      "http://localhost:5000/api/orders",
+      "https://ecommerce-platform-backend-eksr.onrender.com/api/orders",
       {
         headers: {
           Authorization:
@@ -57,7 +57,7 @@ export const markDelivered =
   async (id, token) => {
     const { data } =
       await axios.put(
-        `http://localhost:5000/api/orders/${id}/deliver`,
+        `https://ecommerce-platform-backend-eksr.onrender.com/api/orders/${id}/deliver`,
         {},
         {
           headers: {
@@ -112,7 +112,7 @@ export const verifyPayment =
   async (id, token) => {
     const response =
       await axios.get(
-        `http://localhost:5000/api/orders/${id}/invoice`,
+        `https://ecommerce-platform-backend-eksr.onrender.com/api/orders/${id}/invoice`,
         {
           responseType:
             "blob",

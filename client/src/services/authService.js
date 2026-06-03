@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_URL =
-  "http://localhost:5000/api/auth";
+  "https://ecommerce-platform-backend-eksr.onrender.com/api/auth";
 
 export const loginUser = async (
   email,
@@ -25,7 +25,7 @@ export const registerUser = async (
   password
 ) => {
   const { data } = await axios.post(
-    "http://localhost:5000/api/auth/register",
+    "https://ecommerce-platform-backend-eksr.onrender.com/api/auth/register",
     {
       name,
       email,

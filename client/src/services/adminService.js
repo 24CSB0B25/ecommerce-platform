@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_URL =
-  "http://localhost:5000/api/admin";
+  "https://ecommerce-platform-backend-eksr.onrender.com/api/admin";
 
 export const getDashboardStats =
   async (token) => {

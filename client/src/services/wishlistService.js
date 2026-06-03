@@ -4,7 +4,7 @@ export const getWishlist = async (
     token
     ) => {
     const { data } = await axios.get(
-        "http://localhost:5000/api/wishlist",
+        "https://ecommerce-platform-backend-eksr.onrender.com/api/wishlist",
         {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -20,7 +20,7 @@ export const addToWishlist = async (
     token
     ) => {
     const { data } = await axios.post(
-        `http://localhost:5000/api/wishlist/${productId}`,
+        `https://ecommerce-platform-backend-eksr.onrender.com/api/wishlist/${productId}`,
         {},
         {
         headers: {
@@ -39,7 +39,7 @@ export const removeFromWishlist =
     ) => {
         const { data } =
         await axios.delete(
-            `http://localhost:5000/api/wishlist/${productId}`,
+            `https://ecommerce-platform-backend-eksr.onrender.com/api/wishlist/${productId}`,
             {
             headers: {
                 Authorization:

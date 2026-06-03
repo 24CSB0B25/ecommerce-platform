@@ -2,7 +2,7 @@
 * 8 products instead of only 5 at the pages.
 
 
-
+-----
 Final Polishing Features (Optional but Nice)
 
 These take little effort and make the project look much more professional:
@@ -67,3 +67,210 @@ server/.env   (hide passwords/secrets)
 server/server.js
 
 and I'll walk you through deployment step-by-step.
+
+
+------
+Deployment Plan
+Backend  → Render
+Frontend → Vercel
+Database → MongoDB Atlas
+Images   → Cloudinary
+Payments → Razorpay
+Emails   → Gmail App Password
+Step 1: Push Everything to GitHub
+
+Your project structure should be:
+
+ecommerce-project/
+│
+├── client/
+├── server/
+
+Initialize Git if needed:
+
+git init
+git add .
+git commit -m "Initial commit"
+
+Create a GitHub repo and push:
+
+git remote add origin <your-github-repo-url>
+git push -u origin main
+Step 2: Backend Deployment (Render)
+
+Go to:
+
+Render
+
+Create Web Service
+
+Select:
+
+Root Directory:
+server
+Build Command
+npm install
+Start Command
+node server.js
+Environment Variables
+
+Add:
+
+PORT=5000
+
+JWT_SECRET=<new-secret>
+
+MONGO_URI=<atlas-uri>
+
+RAZORPAY_KEY_ID=<key>
+
+RAZORPAY_KEY_SECRET=<secret>
+
+EMAIL_USER=nexusstore.project@gmail.com
+
+EMAIL_PASS=<gmail-app-password>
+Fix CORS Before Deploying
+
+In server.js
+
+Current:
+
+app.use(cors());
+
+Replace later with:
+
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://YOUR-VERCEL-URL.vercel.app",
+    ],
+    credentials: true,
+  })
+);
+
+For first deployment you can keep:
+
+app.use(cors());
+Step 3: Backend Health Check
+
+After deployment:
+
+Visit:
+
+https://your-render-app.onrender.com/
+
+You should see:
+
+Server is running...
+
+Also test:
+
+https://your-render-app.onrender.com/harsh-test
+
+Expected:
+
+working
+Step 4: Frontend Environment Variable
+
+Create:
+
+client/.env
+
+Instead of hardcoding:
+
+https://ecommerce-platform-backend-eksr.onrender.com
+
+Create:
+
+VITE_API_URL=https://ecommerce-platform-backend-eksr.onrender.com
+Step 5: Replace Hardcoded URLs
+
+You currently have many files like:
+
+axios.get(
+  "https://ecommerce-platform-backend-eksr.onrender.com/api/products"
+)
+
+Change to:
+
+const API_URL =
+  import.meta.env.VITE_API_URL;
+
+Example:
+
+await axios.get(
+  `${API_URL}/api/products`
+);
+
+Do this in:
+
+productService.js
+authService.js
+cartService.js
+orderService.js
+couponService.js
+wishlistService.js
+
+Every service file.
+
+Step 6: Deploy Frontend
+
+Go to:
+
+Vercel
+
+Import GitHub repository.
+
+Root Directory
+client
+Environment Variable
+VITE_API_URL=https://YOUR-RENDER-APP.onrender.com
+
+Deploy.
+
+Step 7: Update Backend CORS
+
+After Vercel gives:
+
+https://nexusstore.vercel.app
+
+Update:
+
+app.use(
+  cors({
+    origin:
+      "https://nexusstore.vercel.app",
+  })
+);
+
+Redeploy backend.
+
+Small Cleanup in server.js
+
+You have:
+
+app.use("/api/auth", authRoutes);
+
+twice.
+
+Remove one:
+
+app.use("/api/auth", authRoutes);
+
+Only keep a single occurrence.
+
+Before You Start Deployment
+
+The most important task now is:
+
+Replace every
+https://ecommerce-platform-backend-eksr.onrender.com
+
+with
+
+import.meta.env.VITE_API_URL
+
+Do that first.
+
+Once you've updated one service file (for example productService.js), paste it here and I'll verify the pattern before you update all the others.

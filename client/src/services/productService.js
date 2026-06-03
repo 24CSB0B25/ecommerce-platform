@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_URL =
-  "http://localhost:5000/api/products";
+  "https://ecommerce-platform-backend-eksr.onrender.com/api/products";
 
 export const getProducts = async (
   keyword = "",
@@ -84,7 +84,7 @@ export const getAllProducts =
   async (token) => {
     const { data } =
       await axios.get(
-        "http://localhost:5000/api/products/admin/all",
+        "https://ecommerce-platform-backend-eksr.onrender.com/api/products/admin/all",
         {
           headers: {
             Authorization:
@@ -101,7 +101,7 @@ export const createReview = async (
   token
 ) => {
   const { data } = await axios.post(
-    `http://localhost:5000/api/products/${productId}/reviews`,
+    `https://ecommerce-platform-backend-eksr.onrender.com/api/products/${productId}/reviews`,
     reviewData,
     {
       headers: {
@@ -117,7 +117,7 @@ export const getSuggestions =
   async (keyword) => {
     const { data } =
       await axios.get(
-        `http://localhost:5000/api/products/suggestions?keyword=${keyword}`
+        `https://ecommerce-platform-backend-eksr.onrender.com/api/products/suggestions?keyword=${keyword}`
       );
 
     return data;

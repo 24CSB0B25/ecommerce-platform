@@ -413,7 +413,7 @@ export const updateCartItem = async (
   token
 ) => {
   const { data } = await axios.put(
-    `http://localhost:5000/api/cart/${cartId}`,
+    `https://ecommerce-platform-backend-eksr.onrender.com/api/cart/${cartId}`,
     { quantity },
     {
       headers: {
