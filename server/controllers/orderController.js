@@ -80,31 +80,24 @@ const createOrder = async (req, res) => {
       req.user._id
     );
 
-    await sendEmail(
+    sendEmail(
       user.email,
       "Order Confirmation 📦",
       `
         <h1>Order Confirmed</h1>
 
-        <p>
-          Hi ${user.name},
-        </p>
+        <p>Hi ${user.name},</p>
 
-        <p>
-          Your order has been placed successfully.
-        </p>
+        <p>Your order has been placed successfully.</p>
 
-        <p>
-          Order Total:
-          ₹${totalPrice}
-        </p>
+        <p>Order Total: ₹${totalPrice}</p>
 
-        <p>
-          Thank you for shopping with Nexus Store.
-        </p>
+        <p>Thank you for shopping with Nexus Store.</p>
       `
-    );
-
+    ).catch((err) => {
+      console.error("EMAIL ERROR:", err);
+    });
+    
     await Cart.deleteMany({
       user: req.user._id,
     });
