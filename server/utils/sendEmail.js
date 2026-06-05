@@ -9,26 +9,27 @@ const sendEmail = async (
   subject,
   html
 ) => {
-  try {
-    const data =
-      await resend.emails.send({
-        from:
-          "onboarding@resend.dev",
-        to,
-        subject,
-        html,
-      });
+  console.log("sendEmail called for:", to);
+    try {
+        const data =
+            await resend.emails.send({
+              from:
+                "onboarding@resend.dev",
+              to,
+              subject,
+              html,
+            });
 
-    console.log(
-      "Email sent:",
-      data
-    );
-  } catch (error) {
-    console.error(
-      "EMAIL ERROR:",
-      error
-    );
-  }
+        console.log(
+            "Email sent:",
+            data
+        );
+    } catch (error) {
+        console.error(
+          "EMAIL ERROR:",
+          error
+        );
+    }
 };
 
 module.exports = sendEmail;
