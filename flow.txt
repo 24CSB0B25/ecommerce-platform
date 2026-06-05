@@ -1,0 +1,151 @@
+let's focus on the improvements that will make the project stronger for your resume and viva.
+
+Priority 1 — Fix Email System
+
+Current status:
+
+Email sending times out on Render
+
+Recommendation:
+
+Replace Gmail SMTP with Resend
+
+Benefits:
+
+Easier setup
+More reliable
+Works well on Render
+Professional-grade email delivery
+Priority 2 — Stock Management
+
+Questions:
+
+When an order is successfully paid:
+
+Does product stock decrease?
+
+Example:
+
+iPhone stock = 10
+
+User buys 2
+
+Stock becomes 8
+
+If not implemented, this should be next.
+
+Priority 3 — Prevent Buying Out-of-Stock Products
+
+Currently can users:
+
+Add stock 0 product to cart?
+
+If yes:
+
+Disable Add to Cart
+Show "Out of Stock"
+Priority 4 — Order Status Flow
+
+Admin should be able to:
+
+Pending
+↓
+Processing
+↓
+Shipped
+↓
+Delivered
+
+Users should see status updates.
+
+Priority 5 — Dashboard Improvements
+
+Your admin dashboard already has charts.
+
+We can add:
+
+Total Revenue
+Total Orders
+Total Users
+Top Selling Products
+Recent Orders
+
+Looks much stronger in a project demo.
+
+Priority 6 — Search + Filters
+
+You already implemented some of this.
+
+Verify:
+
+✅ Search by keyword
+
+✅ Category filter
+
+✅ Pagination
+
+Optional:
+
+Price range filter
+Sort by price
+Sort by newest
+Priority 7 — Product Reviews
+
+Check whether:
+
+Only buyers can review
+
+and
+
+One review per user
+
+are enforced.
+
+Priority 8 — Security Cleanup
+
+Before final submission:
+
+Search:
+
+Ctrl + Shift + F
+
+for:
+
+localhost
+console.log(
+
+Remove unnecessary debugging.
+
+Priority 9 — Resume Value Add
+
+The biggest upgrade for resume impact would be:
+
+Wishlist Notifications
+Product out of stock
+↓
+User wishlists it
+↓
+Admin restocks
+↓
+User receives email
+
+or
+
+Coupon Analytics
+Most used coupon
+Revenue by coupon
+
+These stand out more than basic CRUD features.
+
+My suggested order
+Email system (Resend)
+Stock reduction after payment
+Out-of-stock handling
+Admin dashboard metrics
+Review system improvements
+Security cleanup
+Resume-enhancing feature
+
+First tell me:
+
+When a payment succeeds, does the product stock automatically decrease in MongoDB?
