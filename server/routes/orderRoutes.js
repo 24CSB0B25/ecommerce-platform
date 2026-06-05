@@ -2,6 +2,7 @@ const express = require("express");
 
 const {
   createOrder,
+  createBuyNowOrder,
   getMyOrders,
   getOrderById,
   markOrderPaid,
@@ -20,6 +21,7 @@ const admin = require("../middleware/adminMiddleware");
 const router = express.Router();
 
 router.post("/", protect, createOrder);
+router.post("/buynow", protect, createBuyNowOrder);
 
 router.get(
   "/myorders",

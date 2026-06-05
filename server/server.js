@@ -1,18 +1,17 @@
-const express = require("express");
 const dotenv = require("dotenv");
+dotenv.config();
+
+const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 
 const authRoutes = require("./routes/authRoutes");
-const productRoutes = require("./routes/productRoutes");
+const productRoutes =require("./routes/productRoutes");
 const cartRoutes = require("./routes/cartRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const wishlistRoutes = require("./routes/wishlistRoutes");
-const couponRoutes =require("./routes/couponRoutes");
-//console.log("Product Routes Imported");
-
-dotenv.config();
+const couponRoutes = require("./routes/couponRoutes");
 
 const app = express();
 

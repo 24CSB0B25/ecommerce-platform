@@ -461,12 +461,12 @@ const downloadInvoice =
       order.orderItems.forEach(
         (item) => {
           doc.text(
-            `${item.product.name}
-             x ${item.quantity}
-             = ₹${
-               item.product.price *
-               item.quantity
-             }`
+              `${item.product.name}
+              x ${item.quantity}
+              = ₹${
+                item.product.price *
+                item.quantity
+              }`
           );
         }
       );
@@ -550,11 +550,102 @@ const updateOrderStatus =
     }
 };
 
+const Product =
+  require("../models/Product");
+
+const createBuyNowOrder =
+  async (req, res) => {
+    try {
+      const {
+        productId,
+        quantity,
+        couponCode,
+      } = req.body;
+
+      const product =
+        await Product.findById(
+          productId
+        );
+
+      if (!product) {
+        return res.status(404).json({
+          message:
+            "Product not found",
+        });
+      }
+
+      let discount = 0;
+
+      const originalTotal =
+        product.price * quantity;
+
+      if (couponCode) {
+        const coupon =
+          await Coupon.findOne({
+            code:
+              couponCode.toUpperCase(),
+            isActive: true,
+          });
+
+        if (
+          coupon &&
+          new Date() <
+            coupon.expiryDate
+        ) {
+          if (
+            coupon.discountType ===
+            "percentage"
+          ) {
+            discount =
+              (originalTotal *
+                coupon.discountValue) /
+              100;
+          } else {
+            discount =
+              coupon.discountValue;
+          }
+        }
+      }
+
+      const totalPrice =
+        originalTotal -
+        discount;
+
+      const order =
+        await Order.create({
+          user: req.user._id,
+
+          orderItems: [
+            {
+              product:
+                product._id,
+
+              quantity,
+            },
+          ],
+
+          totalPrice,
+          discount,
+          couponCode,
+        });
+
+      res.status(201).json(
+        order
+      );
+    } catch (error) {
+      res.status(500).json({
+        message:
+          error.message,
+      });
+    }
+};
+
 module.exports = {
   createOrder,
   getMyOrders,
   getOrderById,
   markOrderPaid,
+  createBuyNowOrder,
   downloadInvoice,
   createRazorpayOrder,
   verifyRazorpayPayment,

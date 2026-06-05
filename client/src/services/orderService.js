@@ -21,6 +21,32 @@ export const createOrder = async (
   return data;
 };
 
+export const createBuyNowOrder =
+  async (
+    productId,
+    quantity,
+    couponCode,
+    token
+  ) => {
+    const { data } =
+      await axios.post(
+        `${API_URL}/buynow`,
+        {
+          productId,
+          quantity,
+          couponCode,
+        },
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+          },
+        }
+      );
+
+    return data;
+};
+
 export const getMyOrders = async (
   token
 ) => {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate} from "react-router-dom";
 
 import { getProductById } from "../services/productDetailsService";
 import { addToCart } from "../services/cartService";
@@ -21,7 +21,7 @@ import {
 
 function ProductPage() {
   const { id } = useParams();
-
+  const navigate = useNavigate();
   const { user } = useContext(AuthContext);
 
   const token = user?.token;
@@ -415,6 +415,18 @@ function ProductPage() {
           ❤️ Add To Wishlist
         </button>
         <button
+          onClick={() => {
+            if (!token) {
+              toast.error(
+                "Please login first"
+              );
+              return;
+            }
+
+            navigate(
+              `/checkout-now/${product._id}`
+            );
+          }}
           className="
             w-full
             bg-orange-500
