@@ -162,6 +162,10 @@ function AdminOrdersPage() {
                     </th>
 
                     <th className="p-4">
+                    Address
+                    </th>
+
+                    <th className="p-4">
                     Actions
                     </th>
                 </tr>
@@ -273,6 +277,30 @@ function AdminOrdersPage() {
                             Processing
                         </span>
                         )}
+                    </td>
+
+                    <td className="p-4">
+                        <div className="text-xs space-y-1">
+                            <p className="font-semibold text-white">
+                            {order.shippingAddress?.fullName}
+                            </p>
+
+                            <p>
+                            {order.shippingAddress?.phone}
+                            </p>
+
+                            <p>
+                            {order.shippingAddress?.city}
+                            </p>
+
+                            <p>
+                            {order.shippingAddress?.state}
+                            </p>
+
+                            <p>
+                            {order.shippingAddress?.pincode}
+                            </p>
+                        </div>
                     </td>
 
                     <td className="p-4">

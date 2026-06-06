@@ -149,3 +149,100 @@ Resume-enhancing feature
 First tell me:
 
 When a payment succeeds, does the product stock automatically decrease in MongoDB?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+with:
+
+doc
+  .fontSize(22)
+  .text(
+    `Grand Total: ₹${order.totalPrice}`,
+    {
+      align: "right",
+    }
+  );
+3. Add Divider After Address
+
+After:
+
+doc.text(
+  `${order.shippingAddress?.city || ""}, ${
+    order.shippingAddress?.state || ""
+  } - ${
+    order.shippingAddress?.pincode || ""
+  }`
+);
+
+add:
+
+doc.moveDown();
+
+doc
+  .moveTo(50, doc.y)
+  .lineTo(550, doc.y)
+  .stroke();
+
+doc.moveDown();
+
+This separates customer details from products.
+
+4. Add Order Number at Top Right
+
+After:
+
+doc.fontSize(20)
+  .text("INVOICE");
+
+add:
+
+doc.text(
+  `Order #${order._id
+    .slice(-6)
+    .toUpperCase()}`,
+  {
+    align: "right",
+  }
+);
+Most Important Next Feature
+
+Your order documents now contain:
+
+shippingAddress
+
+I would next show that address in:
+
+OrdersPage ✅
+AdminOrdersPage ✅
+Invoice ✅
+
+Then add:
+
+Profile Page
+↓
+Saved Address
+↓
+Auto-fill checkout
+
+This is a very realistic e-commerce feature and prevents users from entering the address every time.

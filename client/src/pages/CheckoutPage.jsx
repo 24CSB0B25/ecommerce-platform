@@ -56,6 +56,16 @@ function CheckoutPage() {
         setFinalTotal] =
         useState(0);
 
+    const [shippingAddress,setShippingAddress] =
+        useState({
+            fullName: user?.name || "",
+            phone: "",
+            address: "",
+            city: "",
+            state: "",
+            pincode: "",
+    });
+
     useEffect(() => {
         const fetchProduct = async () => {
             try {
@@ -122,94 +132,109 @@ function CheckoutPage() {
         };
 
     const handleProceedToCheckout =
-  async () => {
-    try {
-      if (!token) {
-        toast.error(
-          "Please login first"
-        );
-        return;
-      }
+    async () => {
+        try {
+            if (
+                !shippingAddress.fullName ||
+                !shippingAddress.phone ||
+                !shippingAddress.address ||
+                !shippingAddress.city ||
+                !shippingAddress.state ||
+                !shippingAddress.pincode
+            ) {
+                toast.error(
+                    "Please fill shipping address"
+                );
+                return;
+            }
 
-      const order =
-        await createBuyNowOrder(
-          product._id,
-          quantity,
-          couponCode,
-          token
-        );
+            if (!token) {
+                toast.error(
+                "Please login first"
+                );
+                return;
+            }
 
-      const razorpayOrder =
-            await createRazorpayOrder(
-            order._id,
-            token
-            );
-
-        const options = {
-            key:
-            "rzp_test_Sw3EdNeSHMhbEs",
-
-            amount:
-            razorpayOrder.amount,
-
-            currency:
-            razorpayOrder.currency,
-
-            name:
-            "NexusStore",
-
-            description:
-            "Buy Now Payment",
-
-            order_id:
-            razorpayOrder.id,
-
-            prefill: {
-            name: user.name,
-            email: user.email,
-            },
-
-            handler: async (
-            response
-            ) => {
-            try {
-                await verifyPayment(
-                order._id,
-                response,
+            const order =
+                await createBuyNowOrder(
+                product._id,
+                quantity,
+                couponCode,
+                shippingAddress,
                 token
                 );
 
-                toast.success(
-                "Payment Successful"
+            const razorpayOrder =
+                await createRazorpayOrder(
+                order._id,
+                token
                 );
 
-                navigate(
-                "/orders"
+            const options = {
+                key:
+                "rzp_test_Sw3EdNeSHMhbEs",
+
+                amount:
+                razorpayOrder.amount,
+
+                currency:
+                razorpayOrder.currency,
+
+                name:
+                "NexusStore",
+
+                description:
+                "Buy Now Payment",
+
+                order_id:
+                razorpayOrder.id,
+
+                prefill: {
+                name: user.name,
+                email: user.email,
+                },
+
+                handler: async (
+                response
+                ) => {
+                try {
+                    await verifyPayment(
+                    order._id,
+                    response,
+                    token
+                    );
+
+                    toast.success(
+                    "Payment Successful"
+                    );
+
+                    navigate(
+                    "/orders"
+                    );
+                } catch (error) {
+                    toast.error(
+                    "Verification Failed"
+                    );
+                }
+                },
+
+                theme: {
+                color: "#f59e0b",
+                },
+            };
+
+            const razorpay =
+                new window.Razorpay(
+                options
                 );
-            } catch (error) {
-                toast.error(
-                "Verification Failed"
-                );
-            }
-            },
 
-            theme: {
-            color: "#f59e0b",
-            },
-        };
-
-        const razorpay =
-            new window.Razorpay(
-            options
-            );
-
-        razorpay.open();
+            razorpay.open();
         } catch (error) {
-        toast.error(
-            error.response?.data
-            ?.message ||
-            "Checkout failed"
-        );
+            toast.error(
+                error.response?.data
+                ?.message ||
+                "Checkout failed"
+            );
         }
     };
 
@@ -230,115 +255,235 @@ function CheckoutPage() {
         py-12
         "
         >
-        <h1
-            className="
-            text-5xl
-            font-bold
-            mb-10
-            "
-        >
-            Buy Now
-        </h1>
-
-        <div
-            className="
-            grid
-            lg:grid-cols-[2fr_1fr]
-            gap-8
-            "
-        >
-            <div
-            className="
-            bg-slate-900
-            border
-            border-slate-800
-            rounded-2xl
-            p-6
-            flex
-            gap-6
-            items-center
-            h-50
-            "
-            >
-            <img
-                src={product.image}
-                alt={product.name}
+            <h1
                 className="
-                w-32
-                h-32
-                object-contain
-                bg-white
-                rounded-xl
-                p-2
-                "
-            />
-
-            <div className="flex-1">
-                <h2
-                className="
-                text-2xl
+                text-5xl
                 font-bold
+                mb-10
                 "
-                >
-                {product.name}
-                </h2>
+            >
+                Buy Now
+            </h1>
 
-                <p
+            <div
                 className="
-                text-slate-400
+                grid
+                lg:grid-cols-[2fr_1fr]
+                gap-8
                 "
-                >
-                {product.category}
-                </p>
+            >
+                <div className="space-y-8">
+                    <div
+                    className="
+                    bg-slate-900
+                    border
+                    border-slate-800
+                    rounded-2xl
+                    p-6
+                    flex
+                    gap-6
+                    items-center
+                    h-50
+                    "
+                    >
+                    <img
+                        src={product.image}
+                        alt={product.name}
+                        className="
+                        w-32
+                        h-32
+                        object-contain
+                        bg-white
+                        rounded-xl
+                        p-2
+                        "
+                    />
+
+                    <div className="flex-1">
+                        <h2
+                        className="
+                        text-2xl
+                        font-bold
+                        "
+                        >
+                        {product.name}
+                        </h2>
+
+                        <p
+                        className="
+                        text-slate-400
+                        "
+                        >
+                        {product.category}
+                        </p>
+
+                        <div
+                        className="
+                        flex
+                        items-center
+                        gap-3
+                        mt-4
+                        "
+                        >
+                            <button
+                                onClick={() =>
+                                setQuantity(
+                                    Math.max(
+                                    1,
+                                    quantity - 1
+                                    )
+                                )
+                                }
+                                className="
+                                w-8
+                                h-8
+                                bg-slate-800
+                                rounded-lg
+                                "
+                            >
+                                -
+                            </button>
+
+                            <span>
+                                {quantity}
+                            </span>
+
+                            <button
+                                onClick={() =>
+                                setQuantity(
+                                    quantity + 1
+                                )
+                                }
+                                className="
+                                w-8
+                                h-8
+                                bg-slate-800
+                                rounded-lg
+                                "
+                            >
+                                +
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
                 <div
-                className="
-                flex
-                items-center
-                gap-3
-                mt-4
-                "
-                >
-                <button
-                    onClick={() =>
-                    setQuantity(
-                        Math.max(
-                        1,
-                        quantity - 1
-                        )
-                    )
-                    }
                     className="
-                    w-8
-                    h-8
-                    bg-slate-800
-                    rounded-lg
+                        bg-slate-900
+                        border
+                        border-slate-800
+                        rounded-2xl
+                        p-6
                     "
-                >
-                    -
-                </button>
+                    >
+                    <h2
+                        className="
+                        text-3xl
+                        font-bold
+                        mb-2
+                        "
+                    >
+                        Delivery Address
+                    </h2>
 
-                <span>
-                    {quantity}
-                </span>
+                    <p
+                        className="
+                        text-slate-400
+                        mb-6
+                        "
+                    >
+                        Enter the address where you want your order delivered
+                    </p>
 
-                <button
-                    onClick={() =>
-                    setQuantity(
-                        quantity + 1
-                    )
-                    }
-                    className="
-                    w-8
-                    h-8
-                    bg-slate-800
-                    rounded-lg
-                    "
-                >
-                    +
-                </button>
+                    <div className="grid md:grid-cols-2 gap-4">
+                        <input
+                        type="text"
+                        placeholder="Full Name"
+                        value={shippingAddress.fullName}
+                        onChange={(e) =>
+                            setShippingAddress({
+                            ...shippingAddress,
+                            fullName: e.target.value,
+                            })
+                        }
+                        className="p-3 rounded-lg bg-slate-800"
+                        />
+
+                        <input
+                        type="tel"
+                        maxLength={10}
+                        placeholder="Phone Number"
+                        value={shippingAddress.phone}
+                        onChange={(e) =>
+                            setShippingAddress({
+                            ...shippingAddress,
+                            phone: e.target.value,
+                            })
+                        }
+                        className="p-3 rounded-lg bg-slate-800"
+                        />
+
+                        <input
+                        type="text"
+                        placeholder="City"
+                        value={shippingAddress.city}
+                        onChange={(e) =>
+                            setShippingAddress({
+                            ...shippingAddress,
+                            city: e.target.value,
+                            })
+                        }
+                        className="p-3 rounded-lg bg-slate-800"
+                        />
+
+                        <input
+                        type="text"
+                        placeholder="State"
+                        value={shippingAddress.state}
+                        onChange={(e) =>
+                            setShippingAddress({
+                            ...shippingAddress,
+                            state: e.target.value,
+                            })
+                        }
+                        className="p-3 rounded-lg bg-slate-800"
+                        />
+
+                        <input
+                        type="text"
+                        maxLength={6}
+                        placeholder="Pincode"
+                        value={shippingAddress.pincode}
+                        onChange={(e) =>
+                            setShippingAddress({
+                            ...shippingAddress,
+                            pincode: e.target.value,
+                            })
+                        }
+                        className="p-3 rounded-lg bg-slate-800"
+                        />
+                    </div>
+
+                    <textarea
+                        rows={4}
+                        placeholder="Full Address"
+                        value={shippingAddress.address}
+                        onChange={(e) =>
+                        setShippingAddress({
+                            ...shippingAddress,
+                            address: e.target.value,
+                        })
+                        }
+                        className="
+                        mt-4
+                        w-full
+                        p-3
+                        rounded-lg
+                        bg-slate-800
+                        "
+                    />
                 </div>
-            </div>
+            
             </div>
 
             <div
@@ -350,150 +495,150 @@ function CheckoutPage() {
             p-6
             "
             >
-            <h2
-                className="
-                text-3xl
-                font-bold
-                mb-6
-                "
-            >
-                Order Summary
-            </h2>
-
-            <div
-                className="
-                    flex
-                    justify-between
-                    mb-4
-                "
-                >
-                <span>
-                    Subtotal
-                </span>
-
-                <span>
-                    ₹{product.price * quantity}
-                </span>
-            </div>
-
-            <div
-                className="
-                    flex
-                    justify-between
-                    mb-4
-                "
-                >
-                <span>
-                    Delivery
-                </span>
-
-                <span
+                <h2
                     className="
-                    text-green-400
+                    text-3xl
+                    font-bold
+                    mb-6
                     "
                 >
-                    FREE
-                </span>
-            </div>
+                    Order Summary
+                </h2>
 
-            <div
-                className="
-                    border-t
-                    border-slate-700
-                    my-6
-                "
-            />
-
-            <div
-                className="
-                    flex
-                    justify-between
-                    mb-4
-                "
-                >
-                <span>
-                    Discount
-                </span>
-
-                <span
+                <div
                     className="
-                    text-green-400
+                        flex
+                        justify-between
+                        mb-4
                     "
-                >
-                    - ₹{discount}
-                </span>
+                    >
+                    <span>
+                        Subtotal
+                    </span>
+
+                    <span>
+                        ₹{product.price * quantity}
+                    </span>
+                </div>
+
+                <div
+                    className="
+                        flex
+                        justify-between
+                        mb-4
+                    "
+                    >
+                    <span>
+                        Delivery
+                    </span>
+
+                    <span
+                        className="
+                        text-green-400
+                        "
+                    >
+                        FREE
+                    </span>
+                </div>
+
+                <div
+                    className="
+                        border-t
+                        border-slate-700
+                        my-6
+                    "
+                />
+
+                    <div
+                        className="
+                            flex
+                            justify-between
+                            mb-4
+                        "
+                        >
+                        <span>
+                            Discount
+                        </span>
+
+                        <span
+                            className="
+                            text-green-400
+                            "
+                        >
+                            - ₹{discount}
+                        </span>
+                    </div>
+
+                    <input
+                        type="text"
+                        value={couponCode}
+                        onChange={(e) =>
+                        setCouponCode(
+                            e.target.value
+                        )
+                        }
+                        placeholder="Coupon Code"
+                        className="
+                        w-full
+                        p-3
+                        rounded-lg
+                        bg-slate-800
+                        my-4
+                        "
+                    />
+
+                    <button
+                        onClick={
+                        handleApplyCoupon
+                        }
+                        className="
+                        w-full
+                        bg-green-600
+                        py-3
+                        rounded-lg
+                        mb-6
+                        "
+                    >
+                        Apply Coupon
+                    </button>
+
+                    <div
+                        className="
+                        flex
+                        justify-between
+                        text-2xl
+                        font-bold
+                        mb-8
+                        "
+                    >
+                        <span>
+                        Total
+                        </span>
+
+                        <span
+                        className="
+                        text-amber-400
+                        "
+                        >
+                        ₹{finalTotal}
+                        </span>
+                    </div>
+
+                    <button
+                        onClick={handleProceedToCheckout}
+                        className="
+                        w-full
+                        bg-amber-500
+                        text-black
+                        font-bold
+                        py-4
+                        rounded-xl
+                        "
+                    >
+                        Proceed To Checkout
+                    </button>
+                </div>
             </div>
-
-            <input
-                type="text"
-                value={couponCode}
-                onChange={(e) =>
-                setCouponCode(
-                    e.target.value
-                )
-                }
-                placeholder="Coupon Code"
-                className="
-                w-full
-                p-3
-                rounded-lg
-                bg-slate-800
-                my-4
-                "
-            />
-
-            <button
-                onClick={
-                handleApplyCoupon
-                }
-                className="
-                w-full
-                bg-green-600
-                py-3
-                rounded-lg
-                mb-6
-                "
-            >
-                Apply Coupon
-            </button>
-
-            <div
-                className="
-                flex
-                justify-between
-                text-2xl
-                font-bold
-                mb-8
-                "
-            >
-                <span>
-                Total
-                </span>
-
-                <span
-                className="
-                text-amber-400
-                "
-                >
-                ₹{finalTotal}
-                </span>
-            </div>
-
-            <button
-                onClick={handleProceedToCheckout}
-                className="
-                w-full
-                bg-amber-500
-                text-black
-                font-bold
-                py-4
-                rounded-xl
-                "
-            >
-                Proceed To Checkout
-            </button>
-            </div>
-        </div>
         </div>
     );
 }

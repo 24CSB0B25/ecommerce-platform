@@ -4,7 +4,7 @@ export const getWishlist = async (
     token
     ) => {
     const { data } = await axios.get(
-        "https://ecommerce-platform-backend-eksr.onrender.com/api/wishlist",
+        `${import.meta.env.VITE_API_URL}/wishlist`,
         {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -20,7 +20,7 @@ export const addToWishlist = async (
     token
     ) => {
     const { data } = await axios.post(
-        `https://ecommerce-platform-backend-eksr.onrender.com/api/wishlist/${productId}`,
+        `${import.meta.env.VITE_API_URL}/wishlist/${productId}`,
         {},
         {
         headers: {
@@ -39,7 +39,7 @@ export const removeFromWishlist =
     ) => {
         const { data } =
         await axios.delete(
-            `https://ecommerce-platform-backend-eksr.onrender.com/api/wishlist/${productId}`,
+            `${import.meta.env.VITE_API_URL}/wishlist/${productId}`,
             {
             headers: {
                 Authorization:

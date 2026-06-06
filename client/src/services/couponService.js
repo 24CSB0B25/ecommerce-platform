@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_URL =
-  "https://ecommerce-platform-backend-eksr.onrender.com/api/coupons";
+  `${import.meta.env.VITE_API_URL}/coupons`;
 
 export const getCoupons =
   async (token) => {
@@ -78,8 +78,7 @@ export const applyCoupon =
     cartTotal
   ) => {
     const { data } =
-      await axios.post(
-        "https://ecommerce-platform-backend-eksr.onrender.com/api/coupons/apply",
+      await axios.post(        `${import.meta.env.VITE_API_URL}/coupons/apply`,
         {
           code,
           cartTotal,

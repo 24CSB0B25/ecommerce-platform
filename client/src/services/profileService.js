@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_URL =
-  "https://ecommerce-platform-backend-eksr.onrender.com/api/auth/profile";
+  `${import.meta.env.VITE_API_URL}/auth/profile`;
 
 export const getProfile =
   async (token) => {
@@ -46,7 +46,7 @@ export const changePassword =
     ) => {
         const { data } =
         await axios.put(
-            "https://ecommerce-platform-backend-eksr.onrender.com/api/auth/change-password",
+            `${import.meta.env.VITE_API_URL}/auth/change-password`,
             passwordData,
             {
             headers: {

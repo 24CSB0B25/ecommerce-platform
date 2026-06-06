@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_URL =
-  "https://ecommerce-platform-backend-eksr.onrender.com/api/admin";
+  `${import.meta.env.VITE_API_URL}/admin`;
 
 export const getDashboardStats =
   async (token) => {

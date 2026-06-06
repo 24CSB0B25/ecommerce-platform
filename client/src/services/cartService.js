@@ -1,8 +1,9 @@
 import axios from "axios";
 
 const API_URL =
-  "https://ecommerce-platform-backend-eksr.onrender.com/api/cart";
+  `${import.meta.env.VITE_API_URL}/cart`;
 
+  
 export const addToCart = async (
   productId,
   quantity,
@@ -28,7 +29,7 @@ export const getCart = async (
   token
 ) => {
   const { data } = await axios.get(
-    "https://ecommerce-platform-backend-eksr.onrender.com/api/cart",
+    `${API_URL}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -44,7 +45,7 @@ export const removeCartItem = async (
   token
 ) => {
   const { data } = await axios.delete(
-    `https://ecommerce-platform-backend-eksr.onrender.com/api/cart/${cartId}`,
+    `${API_URL}/${cartId}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -61,7 +62,7 @@ export const updateCartItem = async (
   token
 ) => {
   const { data } = await axios.put(
-    `https://ecommerce-platform-backend-eksr.onrender.com/api/cart/${cartId}`,
+    `${API_URL}/${cartId}`,
     { quantity },
     {
       headers: {

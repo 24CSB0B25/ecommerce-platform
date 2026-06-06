@@ -16,6 +16,9 @@ function OrdersPage() {
   const [orders, setOrders] =
     useState([]);
 
+  const [selectedAddress, setSelectedAddress] =
+  useState(null);
+  
   const steps = [
     "Pending",
     "Paid",
@@ -290,7 +293,28 @@ function OrdersPage() {
                     }
                   </span>
                 </p>
+
               </div>
+
+              <button
+                onClick={() =>
+                  setSelectedAddress(
+                    order.shippingAddress
+                  )
+                }
+                className="
+                  mt-4
+                  w-full
+                  bg-slate-700
+                  hover:bg-slate-600
+                  py-3
+                  rounded-xl
+                  font-semibold
+                  transition
+                "
+              >
+                View Address
+              </button>
 
               <button
                 onClick={() =>
@@ -343,6 +367,82 @@ function OrdersPage() {
           ))}
         </div>
       )}
+      {selectedAddress && (
+        <div
+          className="
+            fixed
+            inset-0
+            bg-black/60
+            flex
+            items-center
+            justify-center
+            z-50
+          "
+        >
+          <div
+            className="
+              bg-slate-900
+              p-6
+              rounded-2xl
+              w-[90%]
+              max-w-md
+              border
+              border-slate-700
+            "
+          >
+            <h2
+              className="
+                text-2xl
+                font-bold
+                mb-4
+                text-amber-400
+              "
+            >
+              Delivery Address
+            </h2>
+
+            <p>
+              {selectedAddress.fullName}
+            </p>
+
+            <p>
+              +91 {selectedAddress.phone}
+            </p>
+
+            <p className="mt-2">
+              {selectedAddress.address}
+            </p>
+
+            <p>
+              {selectedAddress.city},
+              {" "}
+              {selectedAddress.state}
+              {" - "}
+              {selectedAddress.pincode}
+            </p>
+
+            <button
+              onClick={() =>
+                setSelectedAddress(
+                  null
+                )
+              }
+              className="
+                mt-6
+                w-full
+                bg-red-600
+                hover:bg-red-500
+                py-3
+                rounded-xl
+                font-semibold
+              "
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

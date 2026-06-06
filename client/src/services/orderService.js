@@ -1,8 +1,7 @@
 import axios from "axios";
 
 const API_URL =
-  "https://ecommerce-platform-backend-eksr.onrender.com/api/orders";
-
+  `${import.meta.env.VITE_API_URL}/orders`;
 
 export const createOrder = async (
   orderData,
@@ -26,6 +25,7 @@ export const createBuyNowOrder =
     productId,
     quantity,
     couponCode,
+    shippingAddress,
     token
   ) => {
     const { data } =
@@ -35,6 +35,7 @@ export const createBuyNowOrder =
           productId,
           quantity,
           couponCode,
+          shippingAddress,
         },
         {
           headers: {
@@ -51,7 +52,7 @@ export const getMyOrders = async (
   token
 ) => {
   const { data } = await axios.get(
-    "https://ecommerce-platform-backend-eksr.onrender.com/api/orders/myorders",
+    `${API_URL}/myorders`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -67,7 +68,7 @@ export const getAllOrders = async (
 ) => {
   const { data } =
     await axios.get(
-      "https://ecommerce-platform-backend-eksr.onrender.com/api/orders",
+      `${API_URL}`,
       {
         headers: {
           Authorization:
@@ -83,7 +84,7 @@ export const markDelivered =
   async (id, token) => {
     const { data } =
       await axios.put(
-        `https://ecommerce-platform-backend-eksr.onrender.com/api/orders/${id}/deliver`,
+        `${API_URL}/${id}/deliver`,
         {},
         {
           headers: {
@@ -138,7 +139,7 @@ export const verifyPayment =
   async (id, token) => {
     const response =
       await axios.get(
-        `https://ecommerce-platform-backend-eksr.onrender.com/api/orders/${id}/invoice`,
+        `${API_URL}/${id}/invoice`,
         {
           responseType:
             "blob",

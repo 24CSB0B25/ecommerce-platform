@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_URL =
-  "https://ecommerce-platform-backend-eksr.onrender.com/api/products";
+  `${import.meta.env.VITE_API_URL}/products`;
 
 export const getProducts = async (
   keyword = "",
@@ -84,7 +84,7 @@ export const getAllProducts =
   async (token) => {
     const { data } =
       await axios.get(
-        "https://ecommerce-platform-backend-eksr.onrender.com/api/products/admin/all",
+        `${API_URL}/admin/all`,
         {
           headers: {
             Authorization:
@@ -101,7 +101,7 @@ export const createReview = async (
   token
 ) => {
   const { data } = await axios.post(
-    `https://ecommerce-platform-backend-eksr.onrender.com/api/products/${productId}/reviews`,
+    `${import.meta.env.VITE_API_URL}/products/${productId}/reviews`,
     reviewData,
     {
       headers: {
@@ -117,7 +117,7 @@ export const getSuggestions =
   async (keyword) => {
     const { data } =
       await axios.get(
-        `https://ecommerce-platform-backend-eksr.onrender.com/api/products/suggestions?keyword=${keyword}`
+        `${import.meta.env.VITE_API_URL}/products/suggestions?keyword=${keyword}`
       );
 
     return data;

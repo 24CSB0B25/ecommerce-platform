@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_URL =
-  "https://ecommerce-platform-backend-eksr.onrender.com/api/auth";
+  `${import.meta.env.VITE_API_URL}/auth`;
 
 export const loginUser = async (
   email,
@@ -25,7 +25,7 @@ export const registerUser = async (
   password
 ) => {
   const { data } = await axios.post(
-    "https://ecommerce-platform-backend-eksr.onrender.com/api/auth/register",
+    `${API_URL}/register`,
     {
       name,
       email,

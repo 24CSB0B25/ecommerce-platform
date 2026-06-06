@@ -9,7 +9,7 @@ const Coupon = require("../models/Coupon");
 
 const createOrder = async (req, res) => {
   try {
-    const { couponCode } =req.body;
+    const { couponCode, shippingAddress } =req.body;
     const cartItems = await Cart.find({
       user: req.user._id,
     }).populate("product");
@@ -73,6 +73,7 @@ const createOrder = async (req, res) => {
       totalPrice,
       discount,
       couponCode,
+      shippingAddress,
     });
 
 
@@ -404,10 +405,17 @@ const downloadInvoice =
 
       if (!order) {
         return res.status(404).json({
-          message:
-            "Order not found",
+          message: "Order not found",
         });
       }
+
+      if (!order.user) {
+        throw new Error(
+          "Order user not found"
+        );
+      }
+
+      const orderId =order._id.toString();
 
       const doc =
         new PDFDocument();
@@ -424,79 +432,239 @@ const downloadInvoice =
 
       doc.pipe(res);
 
-      doc
-        .fontSize(22)
+      doc.fontSize(26)
+        .text("NEXUS STORE", {
+          align: "center",
+        });
+
+      doc.moveDown(0.5);
+
+      doc.fontSize(12)
         .text(
-          "Nexus Store Invoice"
+          "Premium Electronics & Gadgets",
+          {
+            align: "center",
+          }
         );
+
+      doc.moveDown(2);
+
+      doc.fontSize(20)
+        .text("INVOICE");
+
+      doc.text(
+        `Order #${orderId
+          .slice(-6)
+          .toUpperCase()}`,
+        {
+          align: "right",
+        }
+      );
 
       doc.moveDown();
 
+      doc.fontSize(12);
+
       doc.text(
-        `Order ID: ${order._id}`
+        `Invoice #: INV-${orderId
+          .slice(-6)
+          .toUpperCase()}`
       );
 
       doc.text(
-        `Customer: ${order.user.name}`
+        `Order Date: ${new Date(
+          order.createdAt
+        ).toLocaleDateString()}`
+      );
+
+      doc.text(
+        `Payment Status: ${
+          order.isPaid
+            ? "PAID"
+            : "PENDING"
+        }`
+      );
+
+      doc.text(
+        `Order Status: ${
+          order.status
+        }`
+      );
+
+      doc.moveDown(2);
+
+      doc.fontSize(16)
+        .text("Customer Details");
+
+      doc.moveDown(0.5);
+
+      doc.fontSize(12);
+
+      doc.text(
+        `Name: ${order.user.name}`
       );
 
       doc.text(
         `Email: ${order.user.email}`
       );
 
+      doc.moveDown();
+
+      doc.fontSize(16)
+        .text("Shipping Address");
+
+      doc.moveDown(0.5);
+
+      doc.fontSize(12);
+
       doc.text(
-        `Date: ${new Date(
-          order.createdAt
-        ).toLocaleDateString()}`
+        `Name: ${
+          order.shippingAddress?.fullName || ""
+        }`
+      );
+
+      doc.text(
+        `Phone: ${
+          order.shippingAddress?.phone || ""
+        }`
+      );
+
+      doc.text(
+        `Address: ${
+          order.shippingAddress?.address || ""
+        }`
+      );
+
+      doc.text(
+        `${order.shippingAddress?.city || ""}, ${
+          order.shippingAddress?.state || ""
+        } - ${
+          order.shippingAddress?.pincode || ""
+        }`
       );
 
       doc.moveDown();
 
-      doc.text(
-        "Products"
-      );
+      doc
+        .moveTo(50, doc.y)
+        .lineTo(550, doc.y)
+        .stroke();
+
+      doc.moveDown();
+
+      doc.moveDown(2);
+
+      doc.fontSize(16)
+        .text("Order Items");
 
       doc.moveDown();
 
       order.orderItems.forEach(
         (item) => {
+          if (!item.product) return;
+
           doc.text(
-              `${item.product.name}
-              x ${item.quantity}
-              = ₹${
-                item.product.price *
-                item.quantity
-              }`
+            `${item.product.name}`
           );
+
+          doc.text(
+            `Qty: ${item.quantity}`
+          );
+
+          doc.text(
+            `Price: ₹${item.product.price}`
+          );
+
+          doc.text(
+            `Total: ₹${
+              item.product.price *
+              item.quantity
+            }`
+          );
+
+          doc.moveDown();
         }
       );
 
       doc.moveDown();
 
+      doc
+        .moveTo(
+          50,
+          doc.y
+        )
+        .lineTo(
+          550,
+          doc.y
+        )
+        .stroke();
+
       doc.moveDown();
 
+      doc.fontSize(12);
+
+      const subtotal =
+        order.totalPrice +
+        (order.discount || 0);
+
       doc.text(
-        `Discount: ₹${order.discount || 0}`
+        `Subtotal: ₹${subtotal}`
+      );
+
+      doc.text(
+        `Discount: ₹${
+          order.discount || 0
+        }`
       );
 
       doc.text(
         `Coupon: ${
-          order.couponCode || "None"
+          order.couponCode ||
+          "None"
         }`
       );
 
+      doc.moveDown();
+
       doc
-        .fontSize(16)
+        .fontSize(22)
         .text(
-          `Final Total: ₹${order.totalPrice}`
+          `Grand Total: ₹${order.totalPrice}`,
+          {
+            align: "right",
+          }
         );
+
+      doc.moveDown(2);
+
+      doc
+        .fontSize(12)
+        .text(
+          "Thank you for shopping with Nexus Store!",
+          {
+            align: "center",
+          }
+        );
+
+      doc.text(
+        "For support: support@nexusstore.com",
+        {
+          align: "center",
+        }
+      );
 
       doc.end();
     } catch (error) {
-      res.status(500).json({
-        message:
-          error.message,
-      });
+      console.error(
+        "INVOICE ERROR:",
+        error
+      );
+
+      if (!res.headersSent) {
+        return res.status(500).json({
+          message: error.message,
+        });
+      }
     }
 };
 
@@ -557,10 +725,16 @@ const createBuyNowOrder =
   async (req, res) => {
     try {
       const {
-        productId,
-        quantity,
-        couponCode,
-      } = req.body;
+  productId,
+  quantity,
+  couponCode,
+  shippingAddress,
+} = req.body;
+
+      console.log(
+        "SHIPPING ADDRESS:",
+        shippingAddress
+      );
 
       const product =
         await Product.findById(
@@ -627,6 +801,7 @@ const createBuyNowOrder =
           totalPrice,
           discount,
           couponCode,
+          shippingAddress,
         });
 
       res.status(201).json(

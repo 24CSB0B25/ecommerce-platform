@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const getProductById = async (id) => {
   const { data } = await axios.get(
-    `https://ecommerce-platform-backend-eksr.onrender.com/api/products/${id}`
+    `${import.meta.env.VITE_API_URL}/products/${id}`
   );
 
   return data;
